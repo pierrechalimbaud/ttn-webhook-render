@@ -28,8 +28,12 @@ changer = True
 def receive_uplink():
     global changer
     data = request.json
-    print("Uplink reçu :", data)
-
+    print("Uplink reçu de ", data['end_device_ids']['device_id'], " :")
+    print("Time :",data['received_at'])
+    print("Distance : ",data['decoded_payload']['Distance'])
+    print("Batterie : ",data['decoded_payload']['Bat'])
+    if int(data['decoded_payload']['Distance']) < 60 :
+        print('distance < 60cm')
     # Exemple : envoi automatique d'un downlink
     if changer :
         send_downlink("01000010")  # payload hex
