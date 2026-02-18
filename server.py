@@ -6,10 +6,11 @@ app = Flask(__name__)
 # ---------------------------------------------------
 # CONFIGURATION TTN / TTS
 # ---------------------------------------------------
-API_KEY = "TA_CLE_API_TTN"  # doit inclure Write downlink application traffic
-APP_ID = "ton_application_id"
-DEVICE_ID = "ton_device_id"
+API_KEY = "NNSXS.3HKTCMSEV3ZHPOGTJBVQTXSTRDE6U7W7342IGPY.LFR2OVBNHL3BZCRLARR7AYIY4JTPJNVJEB6COCSXSRD7F3TALEXQ"  # doit inclure Write downlink application traffic
+APP_ID = "my-first-app-chalimbaud"
+DEVICE_ID = "mesure-haut-prof"
 CLUSTER = "eu1"  # souvent eu1, à vérifier dans TTN
+
 
 TTS_URL = f"https://{CLUSTER}.cloud.thethings.network/api/v3/as/applications/{APP_ID}/devices/{DEVICE_ID}/down/push"
 
@@ -22,21 +23,22 @@ headers = {
 # 1. RECEPTION UPLINK DEPUIS TTN
 # ---------------------------------------------------
 
-
+changer = True
 @app.post("/ttn")
 def receive_uplink():
-    global change
+    global changer
     data = request.json
     print("Uplink reçu :", data)
 
     # Exemple : envoi automatique d'un downlink
-    # if change :
-    send_downlink("01000010")  # payload hex
-    print("reglage période à 16s")
-    # else :
-    #     send_downlink("01000020")  # payload hex
-    #     print("reglage période à 32s")
-    # change = not change
+    if changer :
+        send_downlink("01000010")  # payload hex
+        print("reglage période à 16s")
+        changer = False
+    else :
+        send_downlink("01000020")  # payload hex
+        print("reglage période à 32s")
+        changer = True
 
     return "OK", 200
 
