@@ -35,14 +35,14 @@ def receive_uplink():
     if int(data['uplink_message']['decoded_payload']['Distance']) < 60 :
         print('distance < 60cm')
     # Exemple : envoi automatique d'un downlink
-    if changer :
-        send_downlink("01000010")  # payload hex
-        print("reglage période à 16s")
-        changer = False
-    else :
-        send_downlink("01000020")  # payload hex
-        print("reglage période à 32s")
-        changer = True
+    # if changer :
+    #     send_downlink("01000010")  # payload hex
+    #     print("reglage période à 16s")
+    #     changer = False
+    # else :
+    #     send_downlink("01000020")  # payload hex
+    #     print("reglage période à 32s")
+    #     changer = True
 
     return "OK", 200
 
