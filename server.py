@@ -21,13 +21,19 @@ headers = {
 # ---------------------------------------------------
 # 1. RECEPTION UPLINK DEPUIS TTN
 # ---------------------------------------------------
+
+change = True
 @app.post("/ttn")
 def receive_uplink():
     data = request.json
     print("Uplink reçu :", data)
 
     # Exemple : envoi automatique d'un downlink
-    send_downlink("010203")  # payload hex
+    if change :
+        send_downlink("01000010")  # payload hex
+    else :
+        send_downlink("01000020")  # payload hex
+    change = not change
 
     return "OK", 200
 
