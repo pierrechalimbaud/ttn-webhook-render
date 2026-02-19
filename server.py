@@ -8,11 +8,12 @@ app = Flask(__name__)
 # ---------------------------------------------------
 API_KEY = "NNSXS.3HKTCMSEV3ZHPOGTJBVQTXSTRDE6U7W7342IGPY.LFR2OVBNHL3BZCRLARR7AYIY4JTPJNVJEB6COCSXSRD7F3TALEXQ"  # doit inclure Write downlink application traffic
 APP_ID = "my-first-app-chalimbaud"
-DEVICE_ID = "mesure-haut-prof"
+DEVICE_ID_NIV = "mesure-haut-prof"
+DEVICE_ID_IMG = "capt-image-prof"
 CLUSTER = "eu1"  # souvent eu1, à vérifier dans TTN
 
 
-TTS_URL = f"https://{CLUSTER}.cloud.thethings.network/api/v3/as/applications/{APP_ID}/devices/{DEVICE_ID}/down/push"
+TTS_URL = f"https://{CLUSTER}.cloud.thethings.network/api/v3/as/applications/{APP_ID}/devices/{DEVICE_ID_NIV}/down/push"
 
 headers = {
     "Authorization": f"Bearer {API_KEY}",
@@ -28,12 +29,17 @@ changer = True
 def receive_uplink():
     global changer
     data = request.json
-    print("Uplink reçu de ", data['end_device_ids']['device_id'], " :")
+    print("Uplink reçu de ", data['end_DEVICE_ID_NIVs']['DEVICE_ID_NIV'], " :")
     print("Time :",data['received_at'])
-    print("Distance : ",data['uplink_message']['decoded_payload']['Distance'])
-    print("Batterie : ",data['uplink_message']['decoded_payload']['Bat'])
-    if int(data['uplink_message']['decoded_payload']['Distance']) < 60 :
-        print('distance < 60cm')
+    
+    if data['end_DEVICE_ID_NIVs']['DEVICE_ID_NIV'] == DEVICE_ID_NIV:
+        print("Distance : ",data['uplink_message']['decoded_payload']['Distance'])
+        print("Batterie : ",data['uplink_message']['decoded_payload']['Bat'])
+        if int(data['uplink_message']['decoded_payload']['Distance']) < 60 :
+            print('!!!!! Attention distance < 60cm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    elif data['end_DEVICE_ID_NIVs']['DEVICE_ID_NIV'] == DEVICE_ID_IMG:
+        print("uplink : ",data['uplink_message'])
+
     # Exemple : envoi automatique d'un downlink
     # if changer :
     #     send_downlink("01000010")  # payload hex
